@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newsa.web.domain.User;
 import com.newsa.web.domain.services.UserService;
+import com.newsa.web.domain.services.exceptions.InvalidUsername;
 
 @RestController
 @RequestMapping(value="/users")
@@ -19,10 +20,16 @@ public class UserResource {
 	@Autowired
 	private UserService service;
 	
+	@RequestMapping(value="/register")
 	@PostMapping
-	public ResponseEntity<Void> register(@RequestBody User obj){
-	User user = service.insert(obj);
-	URI uri = URI.create("/users" + user.getId());
-	return ResponseEntity.created(uri).build();
+	public ResponseEntity<?> register(@RequestBody User obj){
+		try {
+			User user = service.insert(obj);
+			URI uri = URI.create("/users" + user.getId());
+			return ResponseEntity.created(uri).build();
+		}catch (InvalidUsername e) {
+			return ResponseEntity.badRequest().body("Username already exists!");
+		
+		}
 	}
 }
