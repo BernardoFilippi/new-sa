@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,14 @@ import com.newsa.web.domain.services.exceptions.InvalidUsername;
 
 @RestController
 @RequestMapping(value="/users")
+@CrossOrigin
 public class UserResource {
 	
 	@Autowired
 	private UserService service;
 	
-	@RequestMapping(value="/register")
-	@PostMapping
+	
+	@PostMapping(value="/register")
 	public ResponseEntity<?> register(@RequestBody User obj){
 		try {
 			User user = service.insert(obj);
